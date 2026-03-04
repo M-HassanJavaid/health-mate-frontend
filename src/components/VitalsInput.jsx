@@ -27,7 +27,7 @@ const VitalsInput = () => {
     sleepingDuration: '',
     sugar: '',
     weight: '',
-    note: '' // New Field
+    note: '' 
   });
   const navigate = useNavigate();
 
@@ -68,6 +68,7 @@ const VitalsInput = () => {
     if (!validate()) return;
 
     try {
+      const { systolic, diastolic, sleepingDuration, sugar, weight, note } = vitals;
       const res = await fetchAddVitals({
         sleepingDuration,
         sugar,
@@ -78,6 +79,7 @@ const VitalsInput = () => {
           diastolic
         }
       }).unwrap();
+      console.log(res)
       if (res.success) {
         alert("Vitals logged successfully!");
         setVitals({ systolic: '', diastolic: '', sleepingDuration: '', sugar: '', weight: '', note: '' });

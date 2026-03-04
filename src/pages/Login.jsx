@@ -16,6 +16,12 @@ const Login = () => {
 
     const [fetchLogin , {isLoading : isLoggingIn , error , isError }] = useLoginMutation()
 
+    if (isError) {
+        // alert(error?.data?.message || error?.message || 'Some error occured')
+        console.log(error)
+    }
+
+
     const handleLogin = async (e) => {
         try {
             e.preventDefault();
