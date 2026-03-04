@@ -30,7 +30,6 @@ const ForgetPassword = () => {
                 body: JSON.stringify({ email })
             });
             let data = await res.json();
-            console.log('OTP response')
             console.log(data)
             if (!data.success) throw new Error(data.message);
             setStep(2);
