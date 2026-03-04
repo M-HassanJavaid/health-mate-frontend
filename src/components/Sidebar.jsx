@@ -19,28 +19,29 @@ const Sidebar = () => {
 
   return (
     <>
-      {/* Mobile Top Bar - Improved accessibility and visual balance */}
-      <div className="lg:hidden fixed top-0 left-0 right-0 h-16 bg-(--bg-primary) border-b border-(--border-subtle) z-40 px-4 flex items-center justify-between">
+      {/* Mobile Top Bar - Visible only on mobile when sidebar is closed */}
+      <div className="lg:hidden fixed top-0 left-0 right-0 h-16 bg-(--bg-primary) border-b border-(--border-subtle) z-30 px-4 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <div className="bg-(--btn-primary) p-1.5 rounded-lg text-white">
             <HeartPulse size={20} />
           </div>
-          <span className="font-bold text-lg">Health<span className="text-(--btn-primary)">Mate</span></span>
+          <span className="font-bold text-lg text-(--text-primary)">
+            Health<span className="text-(--btn-primary)">Mate</span>
+          </span>
         </div>
         
         <button 
-          onClick={() => setIsOpen(!isOpen)}
-          className="p-2 bg-(--btn-primary) text-white rounded-xl shadow-md active:scale-95 transition-transform fixed top-5 right-5 lg:hidden"
-          aria-label="Toggle Menu"
+          onClick={() => setIsOpen(true)}
+          className="p-2 bg-(--bg-secondary) text-(--text-primary) rounded-xl active:scale-95 transition-transform"
         >
-          {isOpen ? <X size={22} /> : <Menu size={22} />}
+          <Menu size={22} />
         </button>
       </div>
 
-      {/* Backdrop for mobile - Increased blur for premium feel */}
+      {/* Backdrop */}
       {isOpen && (
         <div 
-          className="fixe inset-0 bg-slate-900/40 backdrop-blur-md z-40 lg:hidden transition-opacity"
+          className="fixed inset-0 w-full h-screen bg-slate-900/40 backdrop-blur-md z-40 lg:hidden"
           onClick={() => setIsOpen(false)}
         />
       )}
@@ -51,18 +52,28 @@ const Sidebar = () => {
         isOpen ? "translate-x-0" : "-translate-x-full"
       )}>
         
-        {/* Logo - Hidden on mobile because it's in the Top Bar */}
-        <div className="hidden lg:flex items-center gap-3 mb-10 px-2">
-          <div className="bg-(--btn-primary) p-2 rounded-xl text-white">
-            <HeartPulse size={24} />
+        {/* Sidebar Header: Logo & Internal Cross Button */}
+        <div className="flex items-center justify-between mb-10 px-2">
+          <div className="flex items-center gap-3">
+            <div className="bg-(--btn-primary) p-2 rounded-xl text-white">
+              <HeartPulse size={24} />
+            </div>
+            <h1 className="text-xl font-bold text-(--text-primary)">
+              Health<span className="text-(--btn-primary)">Mate</span>
+            </h1>
           </div>
-          <h1 className="text-xl font-bold text-(--text-primary)">
-            Health<span className="text-(--btn-primary)">Mate</span>
-          </h1>
+
+          {/* Close button inside sidebar (mobile only) */}
+          <button 
+            onClick={() => setIsOpen(false)}
+            className="lg:hidden p-2 hover:bg-(--bg-secondary) rounded-xl text-(--text-secondary) transition-colors"
+          >
+            <X size={22} />
+          </button>
         </div>
 
         {/* Navigation Links */}
-        <nav className="flex-1 space-y-1.5 sm:space-y-2 mt-4 lg:mt-0">
+        <nav className="flex-1 space-y-1.5 sm:space-y-2">
           {navLinks.map((link) => (
             <SidebarLink 
               key={link.to} 
@@ -84,7 +95,7 @@ const Sidebar = () => {
         </div>
       </aside>
 
-      {/* Spacer for mobile to push content below the fixed Top Bar */}
+      {/* Spacer for mobile layout */}
       <div className="h-16 lg:hidden" />
     </>
   );

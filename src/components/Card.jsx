@@ -11,12 +11,9 @@ const Card = ({
 }) => {
   return (
     <div className={cn(
-      // Layout & Spacing: Adjusted p-6 to p-5 for mobile, gap-5 to gap-4
       "flex flex-col gap-4 sm:gap-5 p-5 sm:p-6 rounded-[2rem] sm:rounded-[2.5rem]",
-      // Themes & Borders
       "bg-(--bg-primary) border border-(--border-subtle)",
-      // Effects
-      "shadow-sm shadow-blue-500/5 transition-all duration-300 hover:shadow-md hover:translate-y-[-2px]",
+      "shadow-sm shadow-blue-500/5 transition-all duration-300 hover:shadow-md hover:translate-y-[-2px] grow",
       className
     )}>
       {/* Icon Container - Scaled down slightly for mobile */}
