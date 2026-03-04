@@ -118,7 +118,7 @@ const DocumentUploadPage = () => {
             <Button 
               type="submit" 
               loading={isLoading} 
-              className="w-full py-4 bg-(--btn-primary) text-white font-black uppercase tracking-widest rounded-2xl shadow-xl shadow-blue-200"
+              className="w-full text-sm bg-(--btn-primary) text-white font-black uppercase tracking-widest rounded-2xl shadow-xl shadow-blue-200"
             >
               {!isLoading && <Send size={18} className="mr-2" />}
               {isLoading ? 'Uploading...' : 'Submit Record'}
