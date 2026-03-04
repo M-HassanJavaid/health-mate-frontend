@@ -31,28 +31,28 @@ const CardContiner = () => {
 
   const stats = [
     {
-      label: "Blood Pressure",
+      label: "Last Blood Pressure",
       value: anylatics.lastBloodPressure || "---",
       unit: "mmHg",
       icon: Activity,
       iconColor: "text-red-500",
     },
     {
-      label: "Blood Sugar",
+      label: "Last Blood Sugar",
       value: anylatics.lastSugar || "---",
       unit: "mg/dL",
       icon: Droplets,
       iconColor: "text-cyan-500",
     },
     {
-      label: "Body Weight",
+      label: "Last Body Weight",
       value: anylatics.lastWeight || "---",
       unit: "kg",
       icon: Weight,
       iconColor: "text-blue-500",
     },
     {
-      label: "Sleep Duration",
+      label: "Last Sleep Duration",
       value: anylatics.lastSleepingDuration || "---",
       unit: "hrs",
       icon: Moon,

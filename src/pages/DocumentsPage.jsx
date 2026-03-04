@@ -67,7 +67,7 @@ const DocumentsPage = () => {
               <p className="text-red-500 font-bold">Failed to load documents. Please try again later.</p>
             </div>
           ) : data?.documents?.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <div className="flex gap-5 flex-wrap justify-center">
               {data.documents.map((doc) => (
                 <DocumentCard key={doc._id} doc={doc} generateAiReport={generateAiReport}/>
               ))}

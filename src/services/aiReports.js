@@ -17,13 +17,15 @@ const aiReportApi = createApi({
                 body: {
                     documentId: id
                 }
-            })
+            }),
+            invalidatesTags: ['AiReport']
         }),
 
         getAiReportById: builder.query({
             query: (id)=>({
                 url: `id/${id}`,
-            })
+            }),
+            providesTags: ['AiReport']
         })
 
         

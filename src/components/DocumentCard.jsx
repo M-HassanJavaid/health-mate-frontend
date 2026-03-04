@@ -12,7 +12,7 @@ const DocumentCard = ({ doc, generateAiReport }) => {
   });
 
   return (
-    <div className="group bg-(--bg-primary) w-full max-w-lg border border-(--border-subtle) rounded-[1.5rem] sm:rounded-[2rem] p-4 sm:p-6 shadow-sm shadow-blue-500/5 transition-all hover:shadow-md hover:border-(--btn-primary)/30 flex flex-col h-full">
+    <div className="group bg-(--bg-primary) w-full border border-(--border-subtle) rounded-[1.5rem] sm:rounded-[2rem] p-4 sm:p-6 shadow-sm shadow-blue-500/5 transition-all hover:shadow-md hover:border-(--btn-primary)/30 flex flex-col h-full">
       {/* Header: Icon & Date */}
       <div className="flex justify-between items-start mb-4">
         <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-(--bg-secondary) flex items-center justify-center text-(--btn-primary) shrink-0">
@@ -47,7 +47,7 @@ const DocumentCard = ({ doc, generateAiReport }) => {
           href={doc.url} 
           target="_blank" 
           rel="noreferrer"
-          className="flex-1 flex items-center justify-center gap-1.5 sm:gap-2 py-2 sm:py-2.5 bg-(--bg-secondary) text-(--text-primary) text-[10px] sm:text-xs font-bold rounded-lg sm:rounded-xl hover:bg-slate-200 transition-colors"
+          className="flex-1 flex p-2 items-center justify-center gap-1.5 sm:gap-2 py-2 sm:py-2.5 bg-(--bg-secondary) text-(--text-primary) text-[10px] sm:text-xs font-bold rounded-lg sm:rounded-xl hover:bg-slate-200 transition-colors"
         >
           <ExternalLink size={14} className="shrink-0" /> 
           <span className="truncate">View File</span>
@@ -56,10 +56,10 @@ const DocumentCard = ({ doc, generateAiReport }) => {
         {doc.aiReport ? (
           <Link 
             to={`/ai/report/${doc.aiReport}`}
-            className="flex-1 flex items-center justify-center gap-1.5 sm:gap-2 py-2 sm:py-2.5 bg-emerald-50 text-emerald-600 text-[10px] sm:text-xs font-bold rounded-lg sm:rounded-xl hover:bg-emerald-100 transition-colors"
+            className="flex-1 p-2 flex items-center justify-center gap-1.5 sm:gap-2 py-2 sm:py-2.5 bg-emerald-50 text-emerald-600 text-[10px] sm:text-xs font-bold rounded-lg sm:rounded-xl hover:bg-emerald-100 transition-colors"
           >
             <Sparkles size={14} className="shrink-0" /> 
-            <span className="truncate">Analysis</span>
+            <span className="truncate">See AI Report</span>
           </Link>
         ) : (
           <button 
@@ -67,7 +67,7 @@ const DocumentCard = ({ doc, generateAiReport }) => {
             className="flex-1 flex items-center justify-center gap-1.5 sm:gap-2 py-2 sm:py-2.5 bg-blue-50 text-(--btn-primary) text-[10px] sm:text-xs font-bold rounded-lg sm:rounded-xl hover:bg-blue-100 transition-colors border-none cursor-pointer"
           >
             <Sparkles size={14} className="shrink-0" /> 
-            <span className="truncate text-nowrap">Get AI</span>
+            <span className="truncate text-nowrap">Generate AI Report</span>
           </button>
         )}
       </div>

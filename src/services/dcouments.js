@@ -8,6 +8,7 @@ const documentApi = createApi({
         baseUrl: `${import.meta.env.VITE_API_URL}/api/v1/document`,
         credentials: 'include'
     }),
+    tagTypes: ['Documents'],
     endpoints: (builder)=>({
 
         uploadDocument : builder.mutation({
@@ -15,13 +16,15 @@ const documentApi = createApi({
                 url: '/add',
                 method: 'POST',
                 body: data
-            })
+            }),
+            invalidatesTags: ['Documents']
         }),
 
         getAllDocuments: builder.query({
             query: ()=>({
                 url: '/all',
-            })
+            }),
+            providesTags: ['Documents']
         })
 
     })

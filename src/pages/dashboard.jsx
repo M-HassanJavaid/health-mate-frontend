@@ -8,16 +8,7 @@ import CardContiner from '../components/CardContiner';
 
 const Dashboard = () => { 
 
-  // const [isLoading, setIsLoading] = useState(true);
-
-  const { isFetching , data , error } = useGetAnylaticsQuery();
-
-
-  if (isFetching) {
-    return <Loader />
-  }
-
-  console.log(data)
+ 
 
   return (
     <DashboardLayout>
