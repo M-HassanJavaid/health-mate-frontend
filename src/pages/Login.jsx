@@ -26,6 +26,7 @@ const Login = () => {
             if (!res.success) {
                 throw new Error(res.message)
             } 
+            dispatch(setLogin(res.user));
             navigate('/')
             alert('You have successfully login.')
         } catch (error) {
