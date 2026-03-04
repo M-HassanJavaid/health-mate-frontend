@@ -12,7 +12,7 @@ const DocumentCard = ({ doc, generateAiReport }) => {
   });
 
   return (
-    <div className="group bg-(--bg-primary) w-full border border-(--border-subtle) rounded-[1.5rem] sm:rounded-[2rem] p-4 sm:p-6 shadow-sm shadow-blue-500/5 transition-all hover:shadow-md hover:border-(--btn-primary)/30 flex flex-col h-full">
+    <div className="group max-w-xs bg-(--bg-primary) w-full border border-(--border-subtle) rounded-[1.5rem] sm:rounded-[2rem] p-4 sm:p-6 shadow-sm shadow-blue-500/5 transition-all hover:shadow-md hover:border-(--btn-primary)/30 flex flex-col h-full">
       {/* Header: Icon & Date */}
       <div className="flex justify-between items-start mb-4">
         <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-(--bg-secondary) flex items-center justify-center text-(--btn-primary) shrink-0">

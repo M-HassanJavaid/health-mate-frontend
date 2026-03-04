@@ -46,16 +46,6 @@ const DocumentsPage = () => {
             </Button>
           </div>
 
-          {/* Search Bar (UI Only for now) */}
-          {/* <div className="relative max-w-md">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
-          <input 
-            type="text"
-            placeholder="Search reports by name..."
-            className="w-full pl-12 pr-4 py-3 bg-(--bg-primary) border border-(--border-subtle) rounded-2xl text-sm focus:border-(--btn-primary) outline-none transition-all shadow-sm shadow-blue-500/5"
-          />
-        </div> */}
-
           {/* Content State Handling */}
           {isLoading ? (
             <div className="flex flex-col items-center justify-center py-20 gap-4">
