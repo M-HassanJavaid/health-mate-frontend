@@ -1,122 +1,149 @@
 import React, { useState } from 'react';
 import Input from '../components/Input.jsx';
 import Button from '../components/Button.jsx';
-import { Mail, Lock, UserPlus } from 'lucide-react';
+import { Mail, Lock, UserPlus, Calendar, Users } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useSignupMutation } from '../services/auth.js';
 
 const Signup = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [name, setName] = useState('')
-    const [isSubmitting, setIsSubmitting] = useState(false);
-    const [isEmailSent, setIsEmailSent] = useState(false)
+    const [name, setName] = useState('');
+    const [dateOfBirth, setDateOfBirth] = useState('');
+    const [gender, setGender] = useState('');
+    const [isEmailSent, setIsEmailSent] = useState(false);
+
+    const [fetchSignup, { isLoading: isSubmitting }] = useSignupMutation()
 
     const handleSubmit = async (e) => {
         try {
             e.preventDefault();
-            setIsSubmitting(true);
 
+            // Basic Validation
+            if (!gender || gender === "") {
+                alert("Please select your gender");
+                return;
+            }
 
-            let res = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/auth/signup`, {
-                credentials: 'include',
-                method: 'POST',
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    email,
-                    password,
-                    name
-                })
-            });
+            let res = await fetchSignup({
+                email,
+                password,
+                name,
+                dateOfBirth,
+                gender
+            }).unwrap();
 
-            res = await res.json();
-            console.log(res)
 
             if (!res.success) {
-                throw new Error(res.message);
+                throw new Error(data.message);
             } else {
-                alert('You have successfully signup, A verification email has sent to you verify your email.');
-                setEmail('');
-                setPassword('')
-                // navigate('/')
-                setIsEmailSent(true)
+                alert('Account created! Please check your email for verification.');
+                setIsEmailSent(true);
             }
 
         } catch (error) {
-            alert(error.message)
-            console.log(error)
-        } finally {
-            setIsSubmitting(false)
-        }
-
-
+            alert(error.message);
+        } 
     };
 
     if (isEmailSent) {
         return (
-            <main className='min-h-screen w-screen bg-(--bg-primary) flex justify-center items-center'>
-                <h1 className='text-2xl text-(--text-primary) text-center font-bold' >
-                    Verify your email to continue.
-                    A verification email sent to your email
-                </h1>
+            <main className='min-h-screen w-screen bg-[var(--bg-primary)] flex justify-center items-center px-6'>
+                <div className="text-center max-w-md">
+                    <div className="w-20 h-20 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <Mail size={40} />
+                    </div>
+                    <h1 className='text-2xl text-[var(--text-primary)] font-bold mb-4' >
+                        Verify your email to continue.
+                    </h1>
+                    <p className="text-[var(--text-secondary)]">
+                        We've sent a verification link to <span className="font-semibold">{email}</span>.
+                        Please check your inbox and spam folder.
+                    </p>
+                </div>
             </main>
-        )
-
+        );
     }
 
     return (
-        <main className="min-h-screen w-full flex items-center justify-center bg-[var(--bg-primary)] px-4">
-            {/* Form Container */}
-            <div className="w-full max-w-md bg-[var(--bg-secondary)] p-8 rounded-2xl shadow-2xl border border-slate-800/50">
+        <main className="min-h-screen w-full flex items-center justify-center bg-[var(--bg-primary)] py-12 px-4">
+            <div className="w-full max-w-md bg-[var(--bg-primary)] p-8 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-[var(--border-subtle)]">
 
                 {/* Header */}
-                <div className="text-center mb-8">
+                <div className="text-center mb-10">
                     <h1 className="text-3xl font-bold text-[var(--text-primary)] mb-2">
-                        Create <span className="text-[var(--accent)]">Account</span>
+                        Your Health <span className="text-[var(--btn-primary)]">Journey</span>
                     </h1>
                     <p className="text-[var(--text-secondary)] text-sm">
-                        Join NoteFlow and start organizing your thoughts.
+                        Create your profile to get personalized AI health insights.
                     </p>
                 </div>
 
-                <form onSubmit={handleSubmit} className="space-y-6">
+                <form onSubmit={handleSubmit} className="space-y-5">
                     {/* Name Field */}
-                    <div className="space-y-2">
-                        <label className="text-sm font-medium text-[var(--text-secondary)] ml-1">Email Address</label>
+                    <div className="space-y-1.5">
+                        <label className="text-xs font-bold uppercase tracking-wider text-[var(--text-secondary)] ml-1">Full Name</label>
                         <Input
                             type="text"
                             value={name}
                             onChange={(e) => setName(e.target.value)}
-                            placeholder="Hassan Javaid"
+                            placeholder="John Doe"
                             required
-                            className='bg-slate-900/50'
+                            className='bg-[var(--bg-secondary)] border-none'
                         />
                     </div>
 
                     {/* Email Field */}
-                    <div className="space-y-2">
-                        <label className="text-sm font-medium text-[var(--text-secondary)] ml-1">Email Address</label>
+                    <div className="space-y-1.5">
+                        <label className="text-xs font-bold uppercase tracking-wider text-[var(--text-secondary)] ml-1">Email Address</label>
                         <Input
                             type="email"
                             value={email}
-                            onChange={(e) => setEmail(e.target.value)} // Fixed typo from 'taeget'
+                            onChange={(e) => setEmail(e.target.value)}
                             placeholder="name@example.com"
                             required
-                            className='bg-slate-900/50'
+                            className='bg-[var(--bg-secondary)] border-none'
                         />
                     </div>
 
+                    {/* Grid for DOB and Gender */}
+                    <div className="grid grid-cols-2 gap-4">
+                        <div className="space-y-1.5">
+                            <label className="text-xs font-bold uppercase tracking-wider text-[var(--text-secondary)] ml-1">Birthday</label>
+                            <Input
+                                type="date"
+                                value={dateOfBirth}
+                                onChange={(e) => setDateOfBirth(e.target.value)}
+                                required
+                                className='bg-[var(--bg-secondary)] border-none'
+                            />
+                        </div>
+                        <div className="space-y-1.5">
+                            <label className="text-xs font-bold uppercase tracking-wider text-[var(--text-secondary)] ml-1">Gender</label>
+                            <select
+                                value={gender}
+                                onChange={(e) => setGender(e.target.value)}
+                                required
+                                className="w-full p-3 rounded-xl bg-[var(--bg-secondary)] border-none text-sm text-[var(--text-primary)] focus:ring-2 focus:ring-[var(--btn-primary)] outline-none"
+                            >
+                                <option value="" disabled>Select</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                                <option value="others">Others</option>
+                            </select>
+                        </div>
+                    </div>
+
                     {/* Password Field */}
-                    <div className="space-y-2">
-                        <label className="text-sm font-medium text-[var(--text-secondary)] ml-1">Password</label>
+                    <div className="space-y-1.5">
+                        <label className="text-xs font-bold uppercase tracking-wider text-[var(--text-secondary)] ml-1">Password</label>
                         <Input
                             type="password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             placeholder="••••••••"
                             required
-                            className='bg-slate-900/50'
+                            className='bg-[var(--bg-secondary)] border-none'
                         />
                     </div>
 
@@ -124,20 +151,20 @@ const Signup = () => {
                     <Button
                         type="submit"
                         loading={isSubmitting}
-                        className="w-full py-3 mt-4 text-lg shadow-lg shadow-blue-500/20"
+                        className="w-full py-4 mt-4 bg-[var(--btn-primary)] text-white font-bold rounded-xl hover:shadow-lg hover:shadow-blue-200 transition-all flex items-center justify-center gap-2"
                     >
-                        {!isSubmitting && <UserPlus size={18} className="mr-2" />}
-                        Sign Up
+                        {!isSubmitting && <UserPlus size={18} />}
+                        {isSubmitting ? 'Creating Account...' : 'Get Started'}
                     </Button>
                 </form>
 
                 {/* Footer Link */}
                 <p className="mt-8 text-center text-[var(--text-secondary)] text-sm">
-                    Already have an account?{' '}
+                    Already part of the community?{' '}
                     <Link to='/login'>
-                        <button className="text-[var(--accent)] hover:underline font-medium">
+                        <span className="text-[var(--btn-primary)] hover:underline font-bold cursor-pointer">
                             Log in
-                        </button>
+                        </span>
                     </Link>
                 </p>
             </div>

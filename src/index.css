@@ -6,11 +6,20 @@
   font-family: "Google Sans", sans-serif;
 }
 
-:root{
-  --bg-primary: #0F172A;
-  --bg-secondary: #1E293B;
-  --btn-primary: #3B82F6;
-  --accent: #22D3EE;
-  --text-primary: #F1F5F9;
-  --text-secondary: #94A3B8;
+:root {
+  /* High-contrast backgrounds for readability */
+  --bg-primary: #FFFFFF;       /* Clean, clinical white */
+  --bg-secondary: #F8FAFC;     /* Soft slate-gray for sections/cards */
+  
+  /* Brand colors (kept consistent for recognition) */
+  --btn-primary: #3B82F6;      /* Trustworthy medical blue */
+  --accent: #0891B2;           /* Darker Cyan for better contrast on white */
+  
+  /* Text colors inverted for light mode */
+  --text-primary: #0F172A;     /* Deep navy for headings (your old bg-primary) */
+  --text-secondary: #64748B;   /* Muted slate for descriptions */
+  
+  /* Added for Health UI depth */
+  --border-subtle: #E2E8F0;    /* For card borders and dividers */
+  --success: #10B981;          /* For positive health metrics */
 }

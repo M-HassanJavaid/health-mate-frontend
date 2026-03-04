@@ -4,44 +4,67 @@ import Signup from './pages/Signup.jsx';
 import Login from './pages/Login.jsx';
 import ForgetPassword from './pages/ForgetPassword.jsx';
 import Dashboard from './pages/dashboard.jsx';
-import CreateNote from './pages/createNote.jsx';
-import AuthContext from './context/authContext.js';
 import ProtectedRoute from './components/ProtectedRoute.jsx'
 import Loader from "./components/Loader.jsx"
-import NoteContext from './context/noteContext.js';
 import EmailVerification from './pages/EmailVerification.jsx';
+import { useDispatch, useSelector } from 'react-redux';
+import { setLogin } from './features/authSlice.js';
+import VitalsForm from './pages/VitalsForm.jsx';
+import { useGetUserQuery } from './services/auth.js';
+import HealthTimeline from './pages/HealthTimeline.jsx';
+import DocumentUploadPage from './pages/DocumentUploadPage.jsx';
+import DocumentsPage from './pages/DocumentsPage.jsx';
+import AiReportPage from './pages/AiReportPage.jsx';
+import ConfirmationModal from './components/ConfirmationOfDocUpload.jsx';
 
 function App() {
 
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [notes, setNotes] = useState([])
+  // const [user, setUser] = useState(null);
+  // const [loading, setLoading] = useState(true);
+  const dispatch = useDispatch();
 
-  async function getUser() {
-    try {
-      let res = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/auth/getUser`, {
-        credentials: 'include'
-      });
-      let data = await res.json();
-      if (!data.isLogin) {
-        return;
-      };
-      setUser(data.user)
-    } catch (error) {
-      alert(error.message)
-    } finally {
-      setLoading(false)
-    }
+
+  const { isFetching, data, isError, error } = useGetUserQuery();
+
+  if (isError) {
+    console.log(error)
   }
 
-  useEffect(() => {
-    getUser()
-  }, []);
+  if (data?.isLogin) {
+    dispatch(setLogin(data.user))
+  };
+
+  // useEffect(() => {
+  //   if (!data) return;
+  //   console.log(isFetching)
+  // }, [data])
 
 
-  if (loading) {
+  // async function getUser() {
+  //   try {
+  //     let res = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/auth/getUser`, {
+  //       credentials: 'include'
+  //     });
+  //     let data = await res.json();
+  //     if (!data.isLogin) {
+  //       return;
+  //     };
+  //   } catch (error) {
+  //     alert(error.message)
+  //   } finally {
+  //     setLoading(false)
+  //   }
+  // }
+
+  // useEffect(() => {
+  //   getUser()
+  // }, []);
+  
+
+  if (isFetching) {
     return <Loader />
   }
+
 
   const router = createBrowserRouter([
     {
@@ -65,25 +88,53 @@ function App() {
       )
     },
     {
-      path: '/create-note',
+      path: '/verify-email',
+      element: <EmailVerification />
+    },
+    {
+      path: '/add-vitals',
       element: (
         <ProtectedRoute>
-          <CreateNote />
+          <VitalsForm />
         </ProtectedRoute>
       )
     },
     {
-      path: '/verify-email',
-      element: <EmailVerification/>
+      path: '/health-timeline',
+      element: (
+        <ProtectedRoute>
+          <HealthTimeline/>
+        </ProtectedRoute>
+      )
+    },
+    {
+      path: '/upload',
+      element: (
+        <ProtectedRoute>
+          <DocumentUploadPage/>
+        </ProtectedRoute>
+      )
+    },
+    {
+      path: '/reports',
+      element: (
+        <ProtectedRoute>
+          <DocumentsPage/>
+        </ProtectedRoute>
+      ),
+    },
+    {
+      path: '/ai/report/:id',
+      element:(
+        <ProtectedRoute>
+          <AiReportPage/>
+        </ProtectedRoute>
+      )
     }
   ])
 
   return (
-    <AuthContext.Provider value={{ user, setUser }} >
-      <NoteContext.Provider value={{ notes, setNotes }}>
-        <RouterProvider router={router} />
-      </NoteContext.Provider>
-    </AuthContext.Provider>
+    <RouterProvider router={router} />
   )
 }
 

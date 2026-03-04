@@ -19,7 +19,7 @@ const Button = ({
     bg-[var(--btn-primary)] text-[var(--text-primary)]
     hover:opacity-90 active:scale-[0.98]
     disabled:opacity-50 disabled:cursor-not-allowed 
-    disabled:active:scale-100 text-lg
+    disabled:active:scale-100 text-lg cursor-pointer
   `;
 
   const isDisabled = disabled || loading;

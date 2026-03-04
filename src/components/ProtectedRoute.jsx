@@ -1,16 +1,16 @@
 import React, { useContext } from 'react'
-import authContext from '../context/authContext'
 import { Navigate, useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 const ProtectedRoute = ({ children }) => {
 
-    const { user , setUser } = useContext(authContext);
+    const auth = useSelector((state)=> state.auth)
 
-    if (!user) {
+    if (!auth.isLogin) {
         return <Navigate to='/login' />
     }
 
-    if (!user.isVerified) {
+    if (!auth.user.isVerified) {
       return <Navigate to='/verify-email' />
     }
 

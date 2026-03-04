@@ -2,15 +2,14 @@ import React, { useContext, useState } from 'react';
 import { MailWarning, Send, ShieldAlert, CheckCircle2 } from 'lucide-react';
 import Button from '../components/Button';
 import cn from '../utils/cn';
-import AuthContext from '../context/authContext';
 import { Navigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 const EmailVerification = () => {
   const [isSending, setIsSending] = useState(false);
   const [isSent, setIsSent] = useState(false);
 
-  const {user , setUser} = useContext(AuthContext);
-
+  const auth = useSelector((state)=> state.auth)
 
   const handleRequestLink = async () => {
     setIsSending(true);
@@ -33,7 +32,7 @@ const EmailVerification = () => {
     }
   };
 
-  if (!user) {
+  if (!auth.isLogin) {
     return <Navigate to='/login' />
   }
 
