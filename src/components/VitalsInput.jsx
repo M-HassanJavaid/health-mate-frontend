@@ -43,7 +43,7 @@ const VitalsInput = () => {
       tempErrors.form = "At least one field (vital or note) is required!";
     }
 
-    // Range Validations (Corrected Logic)
+    console.log(vitals)
     if (systolic && (Number(systolic) < 70 || Number(systolic) > 200)) tempErrors.systolic = "Range: 70-200";
     if (diastolic && (Number(diastolic) < 40 || Number(diastolic) > 130)) tempErrors.diastolic = "Range: 40-130";
     if (sleepingDuration && (Number(sleepingDuration) < 0 || Number(sleepingDuration) > 24)) tempErrors.sleepingDuration = "Max 24 hrs";
@@ -68,7 +68,16 @@ const VitalsInput = () => {
     if (!validate()) return;
 
     try {
-      const res = await fetchAddVitals(vitals).unwrap();
+      const res = await fetchAddVitals({
+        sleepingDuration,
+        sugar,
+        weight,
+        note,
+        bloodPressure:{
+          systolic,
+          diastolic
+        }
+      }).unwrap();
       if (res.success) {
         alert("Vitals logged successfully!");
         setVitals({ systolic: '', diastolic: '', sleepingDuration: '', sugar: '', weight: '', note: '' });
