@@ -6,9 +6,29 @@ import {
 import SidebarLink from './SidebarLink.jsx';
 import Button from './Button.jsx';
 import cn from '../utils/cn.js';
+import { useLogoutMutation } from '../services/auth.js';
+import { useDispatch } from 'react-redux';
+import { setLogout } from '../features/authSlice.js';
 
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const dispatch = useDispatch();
+  const [fetchLogout ] = useLogoutMutation();
+
+  async function handleLogout() {
+    try {
+      let res = await fetchLogout().unwrap();
+      console.log(res)
+      if (!res.success) {
+        throw new Error(res.message)
+      }
+      dispatch(setLogout());
+      alert('You have successfully logged out.')
+    } catch (error) {
+      alert(error.data.message)
+    }
+  }
+
 
   const navLinks = [
     { to: '/', label: 'Dashboard', icon: LayoutDashboard },
@@ -87,7 +107,7 @@ const Sidebar = () => {
         <div className="pt-6 mt-auto border-t border-(--border-subtle)">
           <Button 
             className="w-full justify-start px-4 bg-transparent text-red-500 hover:bg-red-50 hover:text-red-600 border border-transparent transition-colors group"
-            onClick={() => console.log("Logging out...")}
+            onClick={handleLogout}
           >
             <LogOut size={20} className="group-hover:-translate-x-0.5 transition-transform" />
             <span className="font-bold">Logout</span>
