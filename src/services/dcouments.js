@@ -33,6 +33,13 @@ const documentApi = createApi({
                 method: 'DELETE'
             }),
             invalidatesTags: ['Documents']
+        }),
+
+        getRecentDocument : builder.query({
+            query: ()=>({
+                url: '/recent',
+            }),
+            providesTags: ['Documents']
         })
 
     })
@@ -42,5 +49,6 @@ export default documentApi;
 export const { 
     useUploadDocumentMutation,
     useGetAllDocumentsQuery,
-    useDeleteDocumentMutation
+    useDeleteDocumentMutation,
+    useGetRecentDocumentQuery
 } = documentApi;

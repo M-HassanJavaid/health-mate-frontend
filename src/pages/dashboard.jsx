@@ -5,6 +5,7 @@ import DashboardLayout from '../layout/DashboardLayout';
 import { useGetAnylaticsQuery } from '../services/anylatics';
 import Card from '../components/Card';
 import CardContiner from '../components/CardContiner';
+import RecentDocument from '../components/RecentDocument';
 
 const Dashboard = () => { 
 
@@ -12,9 +13,10 @@ const Dashboard = () => {
 
   return (
     <DashboardLayout>
-      <div>
+      {/* <div> */}
         <CardContiner/>
-      </div>
+        <RecentDocument/>
+      {/* </div> */}
     </DashboardLayout>
   )
 }
