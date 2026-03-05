@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import DashboardLayout from '../layout/DashboardLayout.jsx';
-import { useGetAllDocumentsQuery } from '../services/dcouments.js';
+import documentApi, { useGetAllDocumentsQuery } from '../services/dcouments.js';
 import DocumentCard from '../components/DocumentCard.jsx';
 import { Folder, Plus, Search, Loader2 } from 'lucide-react';
 import Button from '../components/Button.jsx';
@@ -8,12 +8,15 @@ import Input from '../components/Input.jsx';
 import { useGenerateAiReportMutation } from '../services/aiReports.js';
 import ProcessingModal from '../components/ProcessingModal.jsx';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import anylaticsApi from '../services/anylatics.js';
 
 const DocumentsPage = () => {
   const { data, isLoading, isError } = useGetAllDocumentsQuery();
   const [fetchGenerate] = useGenerateAiReportMutation();
   const [isGenerating, setIsGenerating] = useState(false)
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   async function generateAiReport(id) {
     try {
@@ -21,7 +24,8 @@ const DocumentsPage = () => {
       let res = await fetchGenerate(id).unwrap();
       if (!res.success) throw new Error(res.message);
       setIsGenerating(false);
-      navigate(`/ai/report/${res.aiReport._id}`)
+      navigate(`/ai/report/${res.aiReport._id}`);
+      dispatch(documentApi.util.invalidateTags(['Documents']));
     } catch (error) {
       alert(error.message)
     }

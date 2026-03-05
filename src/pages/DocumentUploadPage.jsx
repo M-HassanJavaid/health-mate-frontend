@@ -7,6 +7,8 @@ import { FileText, Type, StickyNote, Send } from 'lucide-react';
 import { useUploadDocumentMutation } from '../services/dcouments.js';
 import ConfirmationModal from '../components/ConfirmationOfDocUpload.jsx';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import anylaticsApi from '../services/anylatics.js';
 
 const DocumentUploadPage = () => {
   const [fetchUpload, { isLoading }] = useUploadDocumentMutation();
@@ -21,6 +23,8 @@ const DocumentUploadPage = () => {
     note: '',
     document: null
   });
+
+  const dispatch = useDispatch();
 
   function onConfirmationClose() {
     setIsConfirmationOpen(false);
@@ -53,6 +57,7 @@ const DocumentUploadPage = () => {
         
         // Reset Form
         setFormData({ name: '', note: '', document: null });
+        dispatch(anylaticsApi.util.invalidateTags(['Anylatics']))
       }
       
     } catch (error) {

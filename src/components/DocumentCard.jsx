@@ -5,9 +5,12 @@ import { useDeleteDocumentMutation } from '../services/dcouments.js';
 
 import cn from '../utils/cn.js';
 import anylaticsApi from '../services/anylatics';
+import { useDispatch } from 'react-redux';
 
 const DocumentCard = ({ doc, generateAiReport }) => {
   const [deleteDocument, { isLoading: isDeleting }] = useDeleteDocumentMutation();
+  const dispatch = useDispatch();
+
 
   const date = new Date(doc.createdAt).toLocaleDateString('en-GB', {
     day: '2-digit',
@@ -20,7 +23,7 @@ const DocumentCard = ({ doc, generateAiReport }) => {
       try {
         let res = await deleteDocument(doc._id).unwrap();
         if (!res.success) throw new Error(res.message);
-        anylaticsApi.util.invalidateTags(['Anylatics']);
+        dispatch(anylaticsApi.util.invalidateTags(['Anylatics']));
       } catch (err) {
         console.error("Delete failed:", err);
         alert(err?.data?.message || "Failed to delete document. Please try again.");
@@ -96,7 +99,7 @@ const DocumentCard = ({ doc, generateAiReport }) => {
         ) : (
           <button 
             onClick={() => generateAiReport(doc._id)}
-            className="flex-1 flex items-center justify-center gap-1.5 sm:gap-2 py-2 sm:py-2.5 bg-blue-50 text-(--btn-primary) text-[10px] sm:text-xs font-bold rounded-lg sm:rounded-xl hover:bg-blue-100 transition-colors border-none cursor-pointer"
+            className="flex-1 p-2 flex items-center justify-center gap-1.5 sm:gap-2 py-2 sm:py-2.5 bg-blue-50 text-(--btn-primary) text-[10px] sm:text-xs font-bold rounded-lg sm:rounded-xl hover:bg-blue-100 transition-colors border-none cursor-pointer"
           >
             <Sparkles size={14} className="shrink-0" /> 
             <span className="truncate text-nowrap">Generate AI Report</span>

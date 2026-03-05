@@ -5,6 +5,8 @@ import { Activity, Moon, Droplets, Weight as WeightIcon, Save, StickyNote } from
 import { useAddVitalsMutation } from '../services/vitals.js';
 import cn from '../utils/cn.js';
 import { useNavigate } from 'react-router-dom';
+import anylaticsApi from '../services/anylatics.js';
+import { useDispatch } from 'react-redux';
 
 const FormField = ({ label, unit, error, children }) => (
   <div className="space-y-1.5 flex flex-col w-full">
@@ -30,6 +32,7 @@ const VitalsInput = () => {
     note: '' 
   });
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const validate = () => {
     let tempErrors = {};
@@ -83,7 +86,8 @@ const VitalsInput = () => {
       if (res.success) {
         alert("Vitals logged successfully!");
         setVitals({ systolic: '', diastolic: '', sleepingDuration: '', sugar: '', weight: '', note: '' });
-        navigate('/health-timeline')
+        navigate('/health-timeline');
+        dispatch(anylaticsApi.util.invalidateTags(['Anylatics']))
       } else {
         throw new Error(res.message)
       }

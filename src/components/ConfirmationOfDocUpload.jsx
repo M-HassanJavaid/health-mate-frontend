@@ -4,6 +4,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import Button from './Button.jsx';
 import cn from '../utils/cn';
 import { useGenerateAiReportMutation } from '../services/aiReports.js';
+import { useDispatch } from 'react-redux';
+import documentApi from '../services/dcouments.js';
 
 const ConfirmationModal = ({ 
   isOpen, 
@@ -14,6 +16,7 @@ const ConfirmationModal = ({
 }) => {
   const navigate = useNavigate();
   const [fetchGenerate, { isLoading }] = useGenerateAiReportMutation();
+  const dispatch = useDispatch()
 
   if (!isOpen) return null;
 
@@ -21,11 +24,12 @@ const ConfirmationModal = ({
     try {
       // Trigger the mutation
       const res = await fetchGenerate(docId).unwrap();
-      console.log(res)
       
       if (res.success) {
         // Option 1: Navigate directly to the report
         navigate(`/ai/report/${res.aiReport._id}`);
+        dispatch(documentApi.util.invalidateTags(['Documents']));
+        
         // Option 2: Just close the modal if your parent state updates 'isGenerated'
         // onClose(); 
       }
