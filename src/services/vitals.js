@@ -25,7 +25,16 @@ const vitalsApi = createApi({
                 url: '/getVitals'
             }),
             providesTags: ['Vitals']
+        }),
+
+        deleteVitals: builder.mutation({
+            query: (id)=>({
+                url: `/delete/${id}`,
+                method: 'DELETE'
+            }),
+            invalidatesTags: ['Vitals']
         })
+
         
 
     })
@@ -34,5 +43,6 @@ const vitalsApi = createApi({
 export default vitalsApi;
 export const { 
     useAddVitalsMutation,
-    useGetVitalsQuery
+    useGetVitalsQuery,
+    useDeleteVitalsMutation
 } = vitalsApi;

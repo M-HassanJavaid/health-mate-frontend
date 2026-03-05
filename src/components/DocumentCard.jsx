@@ -1,8 +1,6 @@
 import React from 'react';
 import { FileText, Calendar, ExternalLink, Sparkles, StickyNote } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import cn from '../utils/cn.js';
-import Button from './Button.jsx';
 
 const DocumentCard = ({ doc, generateAiReport }) => {
   const date = new Date(doc.createdAt).toLocaleDateString('en-GB', {
