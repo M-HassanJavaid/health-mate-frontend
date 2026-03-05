@@ -3,6 +3,7 @@ import { Weight, Droplets, Activity, Moon, StickyNote, Calendar, Trash2, Loader2
 import VitalBadge from './VitalBadge';
 import cn from '../utils/cn';
 import { useDeleteVitalsMutation } from '../services/vitals';
+import anylaticsApi from '../services/anylatics';
 
 const TimelineItem = ({ data }) => {
   const [deleteVitals, { isLoading: isDeleting }] = useDeleteVitalsMutation();
@@ -18,8 +19,10 @@ const TimelineItem = ({ data }) => {
     if (window.confirm("Are you sure you want to delete this vital entry?")) {
       try {
         await deleteVitals(data._id).unwrap();
+        anylaticsApi.util.invalidateTags(['Anylatics']);
       } catch (error) {
         console.error("Failed to delete vitals:", error);
+        alert(error?.data?.message || "Failed to delete vitals. Please try again.");
       }
     }
   };

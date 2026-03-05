@@ -1,25 +1,59 @@
 import React from 'react';
-import { FileText, Calendar, ExternalLink, Sparkles, StickyNote } from 'lucide-react';
+import { FileText, Calendar, ExternalLink, Sparkles, StickyNote, Trash2, Loader2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useDeleteDocumentMutation } from '../services/dcouments.js';
+
+import cn from '../utils/cn.js';
+import anylaticsApi from '../services/anylatics';
 
 const DocumentCard = ({ doc, generateAiReport }) => {
+  const [deleteDocument, { isLoading: isDeleting }] = useDeleteDocumentMutation();
+
   const date = new Date(doc.createdAt).toLocaleDateString('en-GB', {
     day: '2-digit',
     month: 'short',
     year: 'numeric'
   });
 
+  const handleDelete = async () => {
+    if (window.confirm(`Are you sure you want to delete "${doc.name}"?`)) {
+      try {
+        let res = await deleteDocument(doc._id).unwrap();
+        if (!res.success) throw new Error(res.message);
+        anylaticsApi.util.invalidateTags(['Anylatics']);
+      } catch (err) {
+        console.error("Delete failed:", err);
+        alert(err?.data?.message || "Failed to delete document. Please try again.");
+      }
+    }
+  };
+
   return (
-    <div className="group max-w-xs bg-(--bg-primary) w-full border border-(--border-subtle) rounded-[1.5rem] sm:rounded-[2rem] p-4 sm:p-6 shadow-sm shadow-blue-500/5 transition-all hover:shadow-md hover:border-(--btn-primary)/30 flex flex-col h-full">
-      {/* Header: Icon & Date */}
+    <div className={cn(
+      "group relative max-w-xs bg-(--bg-primary) w-full border border-(--border-subtle) rounded-[1.5rem] sm:rounded-[2rem] p-4 sm:p-6 shadow-sm shadow-blue-500/5 transition-all hover:shadow-md hover:border-(--btn-primary)/30 flex flex-col h-full",
+      isDeleting && "opacity-60 pointer-events-none"
+    )}>
+      
+      {/* Header: Icon, Date & Delete */}
       <div className="flex justify-between items-start mb-4">
-        <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-(--bg-secondary) flex items-center justify-center text-(--btn-primary) shrink-0">
+        <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-(--bg-secondary) flex items-center justify-center text-(--btn-primary) shrink-0 transition-transform group-hover:scale-105">
           <FileText size={20} className="sm:hidden" />
           <FileText size={24} className="hidden sm:block" />
         </div>
-        <div className="flex items-center gap-1.5 text-(--text-secondary) text-[9px] sm:text-[10px] font-bold uppercase tracking-wider bg-(--bg-secondary)/40 px-2 py-1 rounded-lg sm:bg-transparent sm:p-0">
-          <Calendar size={12} />
-          {date}
+
+        <div className="flex flex-col items-end gap-2">
+          <div className="flex items-center gap-1.5 text-(--text-secondary) text-[9px] sm:text-[10px] font-bold uppercase tracking-wider bg-(--bg-secondary)/40 px-2 py-1 rounded-lg sm:bg-transparent sm:p-0">
+            <Calendar size={12} />
+            {date}
+          </div>
+          
+          <button 
+            onClick={handleDelete}
+            className="p-1.5 text-slate-300 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all active:scale-90"
+            disabled={isDeleting}
+          >
+            {isDeleting ? <Loader2 size={16} className="animate-spin" /> : <Trash2 size={16} />}
+          </button>
         </div>
       </div>
 
@@ -39,7 +73,7 @@ const DocumentCard = ({ doc, generateAiReport }) => {
         )}
       </div>
 
-      {/* Actions: Adjusted for mobile stacking or tight spacing */}
+      {/* Actions */}
       <div className="mt-5 sm:mt-6 pt-4 border-t border-slate-50 flex flex-row gap-2 sm:gap-3">
         <a 
           href={doc.url} 

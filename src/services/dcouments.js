@@ -25,6 +25,14 @@ const documentApi = createApi({
                 url: '/all',
             }),
             providesTags: ['Documents']
+        }),
+
+        deleteDocument: builder.mutation({
+            query: (id)=>({
+                url: `/delete/${id}`,
+                method: 'DELETE'
+            }),
+            invalidatesTags: ['Documents']
         })
 
     })
@@ -33,5 +41,6 @@ const documentApi = createApi({
 export default documentApi;
 export const { 
     useUploadDocumentMutation,
-    useGetAllDocumentsQuery
+    useGetAllDocumentsQuery,
+    useDeleteDocumentMutation
 } = documentApi;
