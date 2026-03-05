@@ -42,7 +42,8 @@ const Signup = () => {
             }
 
         } catch (error) {
-            alert(error.message);
+            alert(error?.message || error?.data?.message || 'Some error occured');
+            console.log(error);
         } 
     };
 
