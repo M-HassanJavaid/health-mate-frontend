@@ -1,5 +1,6 @@
 import { fetchBaseQuery } from "@reduxjs/toolkit/query";
 import { createApi } from "@reduxjs/toolkit/query/react";
+import anylaticsApi from "./anylatics.js";
 
 
 const documentApi = createApi({
@@ -17,7 +18,15 @@ const documentApi = createApi({
                 method: 'POST',
                 body: data
             }),
-            invalidatesTags: [{ type: 'Documents', id: 'LIST' }]
+            invalidatesTags: [{ type: 'Documents', id: 'LIST' }],
+            async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+                try {
+                    await queryFulfilled;
+                    dispatch(anylaticsApi.util.invalidateTags(['Anylatics']));
+                } catch (error) {
+                    // Silently fail if analytics update fails
+                }
+            }
         }),
 
         getAllDocuments: builder.query({
@@ -41,7 +50,15 @@ const documentApi = createApi({
             invalidatesTags: (result, error, id) => [
                 { type: 'Documents', id },
                 { type: 'Documents', id: 'LIST' }
-            ]
+            ],
+            async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+                try {
+                    await queryFulfilled;
+                    dispatch(anylaticsApi.util.invalidateTags(['Anylatics']));
+                } catch (error) {
+                    // Silently fail if analytics update fails
+                }
+            }
         }),
 
         getRecentDocument: builder.query({
