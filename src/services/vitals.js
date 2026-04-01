@@ -1,5 +1,6 @@
 import { fetchBaseQuery } from "@reduxjs/toolkit/query";
 import { createApi } from "@reduxjs/toolkit/query/react";
+import anylaticsApi from "./anylatics";
 
 
 const vitalsApi = createApi({
@@ -17,14 +18,28 @@ const vitalsApi = createApi({
                 body: vitals,
                 method: 'POST'
             }),
-            invalidatesTags: ['Vitals']
+            invalidatesTags: [{ type: 'Vitals', id: 'LIST' }],
+            async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+                try {
+                    await queryFulfilled;
+                    dispatch(anylaticsApi.util.invalidateTags(['Anylatics']));
+                } catch {
+                    // Silently fail if analytics update fails
+                }
+            }
         }),
 
         getVitals : builder.query({
             query: ()=>({
                 url: '/getVitals'
             }),
-            providesTags: ['Vitals']
+            providesTags: (result) => 
+                result 
+                ? [
+                    ...result.vitals.map(({ _id }) => ({ type: 'Vitals', id: _id })),
+                    { type: 'Vitals', id: 'LIST' }
+                ] 
+                : [{ type: 'Vitals', id: 'LIST' }]
         }),
 
         deleteVitals: builder.mutation({
@@ -32,7 +47,10 @@ const vitalsApi = createApi({
                 url: `/delete/${id}`,
                 method: 'DELETE'
             }),
-            invalidatesTags: ['Vitals']
+            invalidatesTags: (result, error, id) => [
+                { type: 'Vitals', id },
+                { type: 'Vitals', id: 'LIST' }
+            ]
         })
 
         

@@ -8,6 +8,7 @@ const aiReportApi = createApi({
         baseUrl: `${import.meta.env.VITE_API_URL}/api/v1/ai`,
         credentials: 'include'
     }),
+    tagTypes: ['AiReport'],
     endpoints: (builder)=>({
 
         generateAiReport : builder.mutation({
@@ -18,14 +19,17 @@ const aiReportApi = createApi({
                     documentId: id
                 }
             }),
-            invalidatesTags: ['AiReport']
+            invalidatesTags: (result) => 
+                result?.aiReport 
+                ? [{ type: 'AiReport', id: result.aiReport._id }, { type: 'AiReport', id: 'LIST' }]
+                : [{ type: 'AiReport', id: 'LIST' }]
         }),
 
         getAiReportById: builder.query({
             query: (id)=>({
                 url: `id/${id}`,
             }),
-            providesTags: ['AiReport']
+            providesTags: (result, error, id) => [{ type: 'AiReport', id }]
         })
 
         

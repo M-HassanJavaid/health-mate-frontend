@@ -8,12 +8,14 @@ const authApi = createApi({
         baseUrl: `${import.meta.env.VITE_API_URL}/api/v1/auth`,
         credentials: 'include'
     }),
+    tagTypes: ['User'],
     endpoints: (builder)=>({
 
         getUser: builder.query({
             query: ()=>({
                 url: '/getUser',
-            })
+            }),
+            providesTags: ['User']
         }),
 
         login: builder.mutation({
@@ -21,7 +23,8 @@ const authApi = createApi({
                 url: '/login',
                 method: "POST",
                 body: credentials
-            })
+            }),
+            invalidatesTags: ['User']
         }),
 
         signup: builder.mutation({
@@ -29,14 +32,16 @@ const authApi = createApi({
                 url: '/signup',
                 method: 'POST',
                 body: credentials
-            })
+            }),
+            invalidatesTags: ['User']
         }),
 
         Logout: builder.mutation({
             query: ()=>({
                 url: '/logout',
                 method: 'POST'
-            })
+            }),
+            invalidatesTags: ['User']
         }),
         
 

@@ -17,14 +17,20 @@ const documentApi = createApi({
                 method: 'POST',
                 body: data
             }),
-            invalidatesTags: ['Documents']
+            invalidatesTags: [{ type: 'Documents', id: 'LIST' }]
         }),
 
         getAllDocuments: builder.query({
             query: ()=>({
                 url: '/all',
             }),
-            providesTags: ['Documents']
+            providesTags: (result) => 
+                result 
+                ? [
+                    ...result.documents.map(({ _id }) => ({ type: 'Documents', id: _id })),
+                    { type: 'Documents', id: 'LIST' }
+                ] 
+                : [{ type: 'Documents', id: 'LIST' }]
         }),
 
         deleteDocument: builder.mutation({
@@ -32,14 +38,20 @@ const documentApi = createApi({
                 url: `/delete/${id}`,
                 method: 'DELETE'
             }),
-            invalidatesTags: ['Documents']
+            invalidatesTags: (result, error, id) => [
+                { type: 'Documents', id },
+                { type: 'Documents', id: 'LIST' }
+            ]
         }),
 
         getRecentDocument : builder.query({
             query: ()=>({
                 url: '/recent',
             }),
-            providesTags: ['Documents']
+            providesTags: (result) => 
+                result?.document 
+                ? [{ type: 'Documents', id: result.document._id }, { type: 'Documents', id: 'RECENT' }]
+                : [{ type: 'Documents', id: 'RECENT' }]
         })
 
     })
