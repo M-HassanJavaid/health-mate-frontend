@@ -10,10 +10,10 @@ const vitalsApi = createApi({
         credentials: 'include'
     }),
     tagTypes: ['Vitals'],
-    endpoints: (builder)=>({
+    endpoints: (builder) => ({
 
         addVitals: builder.mutation({
-            query: (vitals)=>({
+            query: (vitals) => ({
                 url: '/add',
                 body: vitals,
                 method: 'POST'
@@ -29,21 +29,21 @@ const vitalsApi = createApi({
             }
         }),
 
-        getVitals : builder.query({
-            query: ()=>({
+        getVitals: builder.query({
+            query: () => ({
                 url: '/getVitals'
             }),
-            providesTags: (result) => 
-                result 
-                ? [
-                    ...result.vitals.map(({ _id }) => ({ type: 'Vitals', id: _id })),
-                    { type: 'Vitals', id: 'LIST' }
-                ] 
-                : [{ type: 'Vitals', id: 'LIST' }]
+            providesTags: (result) =>
+                result
+                    ? [
+                        ...result.vitals.map(({ _id }) => ({ type: 'Vitals', id: _id })),
+                        { type: 'Vitals', id: 'LIST' }
+                    ]
+                    : [{ type: 'Vitals', id: 'LIST' }]
         }),
 
         deleteVitals: builder.mutation({
-            query: (id)=>({
+            query: (id) => ({
                 url: `/delete/${id}`,
                 method: 'DELETE'
             }),
@@ -53,13 +53,13 @@ const vitalsApi = createApi({
             ]
         })
 
-        
+
 
     })
 })
 
 export default vitalsApi;
-export const { 
+export const {
     useAddVitalsMutation,
     useGetVitalsQuery,
     useDeleteVitalsMutation

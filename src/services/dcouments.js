@@ -9,10 +9,10 @@ const documentApi = createApi({
         credentials: 'include'
     }),
     tagTypes: ['Documents'],
-    endpoints: (builder)=>({
+    endpoints: (builder) => ({
 
-        uploadDocument : builder.mutation({
-            query: (data)=>({
+        uploadDocument: builder.mutation({
+            query: (data) => ({
                 url: '/add',
                 method: 'POST',
                 body: data
@@ -21,20 +21,20 @@ const documentApi = createApi({
         }),
 
         getAllDocuments: builder.query({
-            query: ()=>({
+            query: () => ({
                 url: '/all',
             }),
-            providesTags: (result) => 
-                result 
-                ? [
-                    ...result.documents.map(({ _id }) => ({ type: 'Documents', id: _id })),
-                    { type: 'Documents', id: 'LIST' }
-                ] 
-                : [{ type: 'Documents', id: 'LIST' }]
+            providesTags: (result) =>
+                result
+                    ? [
+                        ...result.documents.map(({ _id }) => ({ type: 'Documents', id: _id })),
+                        { type: 'Documents', id: 'LIST' }
+                    ]
+                    : [{ type: 'Documents', id: 'LIST' }]
         }),
 
         deleteDocument: builder.mutation({
-            query: (id)=>({
+            query: (id) => ({
                 url: `/delete/${id}`,
                 method: 'DELETE'
             }),
@@ -44,21 +44,21 @@ const documentApi = createApi({
             ]
         }),
 
-        getRecentDocument : builder.query({
-            query: ()=>({
+        getRecentDocument: builder.query({
+            query: () => ({
                 url: '/recent',
             }),
-            providesTags: (result) => 
-                result?.document 
-                ? [{ type: 'Documents', id: result.document._id }, { type: 'Documents', id: 'RECENT' }]
-                : [{ type: 'Documents', id: 'RECENT' }]
+            providesTags: (result) =>
+                result?.document
+                    ? [{ type: 'Documents', id: result.document._id }, { type: 'Documents', id: 'RECENT' }]
+                    : [{ type: 'Documents', id: 'RECENT' }]
         })
 
     })
 })
 
 export default documentApi;
-export const { 
+export const {
     useUploadDocumentMutation,
     useGetAllDocumentsQuery,
     useDeleteDocumentMutation,

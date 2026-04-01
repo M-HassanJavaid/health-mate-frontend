@@ -10,9 +10,13 @@ import { useLogoutMutation } from '../services/auth.js';
 import { useDispatch } from 'react-redux';
 import { setLogout } from '../features/authSlice.js';
 
+import { useNavigate } from 'react-router-dom';
+
+
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [fetchLogout ] = useLogoutMutation();
 
   async function handleLogout() {
@@ -23,9 +27,10 @@ const Sidebar = () => {
         throw new Error(res.message)
       }
       dispatch(setLogout());
-      alert('You have successfully logged out.')
+      // alert('You have successfully logged out.')
+      navigate('/login', { replace: true });
     } catch (error) {
-      alert(error.data.message)
+       alert(error?.data?.message || 'Something went wrong during logout')
     }
   }
 
